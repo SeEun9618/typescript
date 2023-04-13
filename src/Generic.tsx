@@ -38,3 +38,17 @@ function identity3<T>(arg: T): T {
 }
 
 let myIdentity2: GenericIdentityFn<number> = identity3;
+
+// 제네릭 제약조건
+interface Lengthwise {
+    length: number;
+}
+
+function loggingIdentity3<T extends Lengthwise>(arg: T): T {
+    console.log(arg.length);  // 이제 .length 프로퍼티가 있는 것을 알기 때문에 더 이상 오류가 발생하지 않는다.
+    return arg;
+}
+// error
+// loggingIdentity3(3); // number는 .length 프로퍼티가 없다.
+
+loggingIdentity3({length: 10, value: 3});
