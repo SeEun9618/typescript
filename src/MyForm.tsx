@@ -1,26 +1,29 @@
 import React, { useState, useRef } from 'react';
 
-type MyFormProps = {
-  onSubmit: (form: { name: string; description: string }) => void;
+type FormValues = {
+    name: string;
+    description: string;
 };
 
-function MyForm({ onSubmit }: MyFormProps) {
+type MyFormProps = {
+    initialValues?: FormValues;
+    onSubmit: (form: FormValues) => void;
+};
+
+function MyForm({ initialValues = { name: '', description: '' }, onSubmit }: MyFormProps) {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const [form, setForm] = useState({
-        name: '',
-        description: '',
-    });
+    const [form, setForm] = useState<FormValues>(initialValues);
 
     const { name, description } = form;
 
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setForm({
-            ...form,
+        setForm((prevForm) => ({
+            ...prevForm,
             [name]: value
-        });
+        }));
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -30,16 +33,34 @@ function MyForm({ onSubmit }: MyFormProps) {
             name: '',
             description: ''
         });
-        if(!inputRef.current) {
-            return;
+        if (inputRef.current) {
+            inputRef.current.focus();
         }
-        inputRef.current.focus();
     };
 
     return (
         <form onSubmit={handleSubmit}>
-            <input name="name" value={name} onChange={onChange} ref={inputRef} />
-            <input name="description" value={description} onChange={onChange} />
+            <label htmlFor="name-input">이름:</label>
+            <input
+                id="name-input"
+                name="name"
+                value={name}
+                onChange={handleChange}
+                ref={inputRef}
+                autoComplete="off"
+                required
+                maxLength={30}
+            />
+            <label htmlFor="description-input">설명:</label>
+            <input
+                id="description-input"
+                name="description"
+                value={description}
+                onChange={handleChange}
+                autoComplete="off"
+                required
+                maxLength={200}
+            />
             <button type="submit">등록</button>
         </form>
     );
