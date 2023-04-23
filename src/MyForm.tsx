@@ -1,18 +1,24 @@
 import React, { useState, useRef } from 'react';
 
-type FormValues = {
+type FormValues = Readonly<{
     name: string;
     description: string;
-    nameError: string;
-    descriptionError: string;
-};
+    nameError: ErrorType;
+    descriptionError: ErrorType;
+}>;
 
 type MyFormProps = {
     initialValues?: FormValues;
     onSubmit: (form: FormValues) => void;
 };
 
-function MyForm({ initialValues = { name: '', description: '', nameError: '', descriptionError: '' }, onSubmit }: MyFormProps) {
+enum ErrorType {
+    None = '',
+    InvalidLength = '2~10자 이내로 입력해주세요.',
+    InvalidDescription = '10~100자 이내로 입력해주세요.',
+}
+
+function MyForm({ initialValues = { name: '', description: '', nameError: ErrorType.None, descriptionError: ErrorType.None }, onSubmit }: MyFormProps) {
 
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,15 +41,15 @@ function MyForm({ initialValues = { name: '', description: '', nameError: '', de
         setForm((prevForm) => ({
             ...prevForm,
             nameError,
-            descriptionError
+            descriptionError,
         }));
-        if (!nameError && !descriptionError) {
+        if (nameError === ErrorType.None && descriptionError === ErrorType.None) {
             onSubmit(form);
             setForm({
                 name: '',
                 description: '',
-                nameError: '',
-                descriptionError: ''
+                nameError: ErrorType.None,
+                descriptionError: ErrorType.None
             });
             if (inputRef.current) {
                 inputRef.current.focus();
@@ -53,16 +59,16 @@ function MyForm({ initialValues = { name: '', description: '', nameError: '', de
 
     const validateName = (name: string) => {
         if (name.length < 2 || name.length > 10) {
-            return '이름은 2~10자 이내로 입력해주세요.';
+            return ErrorType.InvalidLength;
         }
-        return '';
+        return ErrorType.None;
     };
 
     const validateDescription = (description: string) => {
         if (description.length < 10 || description.length > 100) {
-            return '설명은 10~100자 이내로 입력해주세요.';
+            return ErrorType.InvalidDescription;
         }
-        return '';
+        return ErrorType.None;
     };
 
     return (
