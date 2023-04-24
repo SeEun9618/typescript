@@ -1,16 +1,4 @@
-import React, { useState, useRef } from 'react';
-
-type FormValues = Readonly<{
-    name: string;
-    description: string;
-    nameError: ErrorType;
-    descriptionError: ErrorType;
-}>;
-
-type MyFormProps = {
-    initialValues?: FormValues;
-    onSubmit: (form: FormValues) => void;
-};
+import React, { useState, useRef, ChangeEvent, FormEvent } from 'react';
 
 enum ErrorType {
     None = '',
@@ -18,23 +6,39 @@ enum ErrorType {
     InvalidDescription = '10~100자 이내로 입력해주세요.',
 }
 
-function MyForm({ initialValues = { name: '', description: '', nameError: ErrorType.None, descriptionError: ErrorType.None }, onSubmit }: MyFormProps) {
+interface FormValues {
+    readonly name: string;
+    readonly description: string;
+    readonly nameError: ErrorType;
+    readonly descriptionError: ErrorType;
+}
 
+interface MyFormProps {
+    initialValues?: FormValues;
+    onSubmit: (form: FormValues) => void;
+}
+
+function MyForm({initialValues = {
+                        name: '',
+                        description: '',
+                        nameError: ErrorType.None,
+                        descriptionError: ErrorType.None,
+                    }, onSubmit,}: MyFormProps) {
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [form, setForm] = useState<FormValues>(initialValues);
 
     const { name, description, nameError, descriptionError } = form;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setForm((prevForm) => ({
             ...prevForm,
-            [name]: value
+            [name]: value,
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
         const nameError = validateName(name);
         const descriptionError = validateDescription(description);
@@ -49,7 +53,7 @@ function MyForm({ initialValues = { name: '', description: '', nameError: ErrorT
                 name: '',
                 description: '',
                 nameError: ErrorType.None,
-                descriptionError: ErrorType.None
+                descriptionError: ErrorType.None,
             });
             if (inputRef.current) {
                 inputRef.current.focus();
@@ -57,14 +61,14 @@ function MyForm({ initialValues = { name: '', description: '', nameError: ErrorT
         }
     };
 
-    const validateName = (name: string) => {
+    const validateName = (name: string): ErrorType => {
         if (name.length < 2 || name.length > 10) {
             return ErrorType.InvalidLength;
         }
         return ErrorType.None;
     };
 
-    const validateDescription = (description: string) => {
+    const validateDescription = (description: string,): ErrorType => {
         if (description.length < 10 || description.length > 100) {
             return ErrorType.InvalidDescription;
         }
@@ -84,7 +88,7 @@ function MyForm({ initialValues = { name: '', description: '', nameError: ErrorT
                 required
                 maxLength={10}
             />
-            <div className="error-message">{nameError}</div>
+            <div>{nameError}</div>
             <label htmlFor="description-input">설명:</label>
             <input
                 id="description-input"
@@ -95,7 +99,7 @@ function MyForm({ initialValues = { name: '', description: '', nameError: ErrorT
                 required
                 maxLength={100}
             />
-            <div className="error-message">{descriptionError}</div>
+            <div>{descriptionError}</div>
             <button type="submit">등록</button>
         </form>
     );
