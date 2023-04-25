@@ -14,18 +14,18 @@ import MyForm from "./MyForm";
 // }
 
 
-//Counter.tsx
-// const App: React.FC = () => {
-//   return <Counter />;
-// }
-
 //MyForm.tsx
 const App: React.FC = () => {
   const onSubmit = (form: { name: string; description: string }) => {
     console.log(form);
   };
 
-  return <MyForm onSubmit={onSubmit} />;
+  return (
+      <>
+        <MyForm onSubmit={onSubmit} />
+        <Counter />
+      </>
+  );
 }
 
 export default App;
