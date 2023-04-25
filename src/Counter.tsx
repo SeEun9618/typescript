@@ -3,20 +3,32 @@ import React, { useState } from "react";
 interface CounterState {
     count: number;
     step: number;
+    maxCount: number;
 }
 
 function Counter() {
-    const [state, setState] = useState<CounterState>({ count: 0, step: 1 });
+    const [state, setState] = useState<CounterState>({ count: 0, step: 1, maxCount: 10 });
 
     const onIncrease = () => {
-        setState({ ...state, count: state.count + state.step });
+        setState((prevState) => {
+            const nextCount = prevState.count + prevState.step;
+            return { ...prevState, count: nextCount > state.maxCount ? state.maxCount : nextCount };
+        });
     };
     const onDecrease = () => {
-        setState({ ...state, count: state.count - state.step });
+        setState((prevState) => {
+            const nextCount = prevState.count - prevState.step;
+            return { ...prevState, count: nextCount < 0 ? 0 : nextCount };
+        });
     };
     const onChangeStep = (e: React.ChangeEvent<HTMLInputElement>) => {
         const step = Number(e.target.value);
-        setState({ ...state, step });
+        setState((prevState) => ({ ...prevState, step }));
+    };
+
+    const onChangeMaxCount = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const maxCount = Number(e.target.value);
+        setState((prevState) => ({ ...prevState, maxCount }));
     };
 
     return (
@@ -28,12 +40,11 @@ function Counter() {
             </div>
             <div>
                 <label htmlFor="step-input">Step:</label>
-                <input
-                    id="step-input"
-                    type="number"
-                    value={state.step}
-                    onChange={onChangeStep}
-                />
+                <input type="number" value={state.step} onChange={onChangeStep} />
+            </div>
+            <div>
+                <label htmlFor="max-count-input">Max Count:</label>
+                <input type="number" value={state.maxCount} onChange={onChangeMaxCount} />
             </div>
         </div>
     );
