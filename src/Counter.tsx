@@ -6,28 +6,38 @@ interface CounterState {
     maxCount: number;
 }
 
-function Counter() {
-    const [state, setState] = useState<CounterState>({ count: 0, step: 1, maxCount: 10 });
+function Counter(): JSX.Element {
+    const [state, setState] = useState<CounterState>({
+        count: 0,
+        step: 1,
+        maxCount: 10,
+    });
 
-    const onIncrease = () => {
+    const onIncrease = (): void => {
         setState((prevState) => {
             const nextCount = prevState.count + prevState.step;
-            return { ...prevState, count: nextCount > state.maxCount ? state.maxCount : nextCount };
+            return {
+                ...prevState,
+                count: nextCount > state.maxCount ? state.maxCount : nextCount,
+            };
         });
     };
-    const onDecrease = () => {
+    const onDecrease = (): void => {
         setState((prevState) => {
             const nextCount = prevState.count - prevState.step;
-            return { ...prevState, count: nextCount < 0 ? 0 : nextCount };
+            return {
+                ...prevState,
+                count: nextCount < 0 ? 0 : nextCount
+            };
         });
     };
-    const onChangeStep = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const step = Number(e.target.value);
+    const onChangeStep = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const step: number = Number(e.target.value);
         setState((prevState) => ({ ...prevState, step }));
     };
 
-    const onChangeMaxCount = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const maxCount = Number(e.target.value);
+    const onChangeMaxCount = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const maxCount: number = Number(e.target.value);
         setState((prevState) => ({ ...prevState, maxCount }));
     };
 
@@ -40,11 +50,23 @@ function Counter() {
             </div>
             <div>
                 <label htmlFor="step-input">Step:</label>
-                <input type="number" value={state.step} onChange={onChangeStep} />
+                <input
+                    type="number"
+                    value={state.step}
+                    onChange={onChangeStep}
+                    min={1}
+                    max={state.maxCount}
+                />
             </div>
             <div>
                 <label htmlFor="max-count-input">Max Count:</label>
-                <input type="number" value={state.maxCount} onChange={onChangeMaxCount} />
+                <input
+                    type="number"
+                    value={state.maxCount}
+                    onChange={onChangeMaxCount}
+                    min={state.count}
+                    max={Number.MAX_SAFE_INTEGER}
+                />
             </div>
         </div>
     );
