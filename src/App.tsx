@@ -20,10 +20,21 @@ const App: React.FC = () => {
     console.log(form);
   };
 
+  const onClick = (name: string) => {
+      console.log(`${name} 안녕!!`);
+  };
+
   return (
       <>
         <MyForm onSubmit={onSubmit} />
         <Counter />
+        <Greetings
+            name="세은"
+            onClick={onClick}
+            language="Korea!"
+            favoriteFoods={["banana", "apple"]}
+            address={{city: "seoul", state: "gw"}}
+        />
       </>
   );
 }
