@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 type GreetingsProps = {
     name: string;
@@ -24,8 +24,14 @@ function Greetings({
                        favoriteFoods,
                        address,
                    }: GreetingsProps) {
+    const inputRef = useRef<HTMLInputElement | null>(null);
 
-    const handleClick = () => onClick(name);
+    const handleClick = () => {
+        onClick(name);
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    };
 
     return (
         <div>
@@ -37,11 +43,14 @@ function Greetings({
             {address && (
                 <>
                     <p>Address:</p>
-                    <p>{address.city}, {address.state}</p>
+                    <p>
+                        {address.city}, {address.state}
+                    </p>
                 </>
             )}
             <div>
                 <button onClick={handleClick}>Click!!!!</button>
+                <input type="text" ref={inputRef} />
             </div>
         </div>
     );
