@@ -24,6 +24,10 @@ const App: React.FC = () => {
       console.log(`${name} 안녕!!`);
   };
 
+  const handleFoodClick = (food: string) => {
+      console.log(`Clicked on ${food}`);
+  };
+
   return (
       <>
         <MyForm onSubmit={onSubmit} />
@@ -32,8 +36,9 @@ const App: React.FC = () => {
             name="세은"
             onClick={onClick}
             language="Korea!"
-            favoriteFoods={["banana", "apple"]}
+            favoriteFoods={["banana", "apple", "pair", "berry"]}
             address={{city: "seoul", state: "gw"}}
+            onFoodClick={handleFoodClick}
         />
       </>
   );

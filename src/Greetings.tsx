@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 type GreetingsProps = {
     name: string;
@@ -12,6 +12,7 @@ type GreetingsProps = {
         city: string;
         state: string;
     };
+    onFoodClick?: (food: string) => void;
 };
 
 function Greetings({
@@ -23,13 +24,13 @@ function Greetings({
                        language,
                        favoriteFoods,
                        address,
+                       onFoodClick,
                    }: GreetingsProps) {
-    const inputRef = useRef<HTMLInputElement | null>(null);
+    const handleClick = () => onClick(name);
 
-    const handleClick = () => {
-        onClick(name);
-        if (inputRef.current) {
-            inputRef.current.focus();
+    const handleFoodClick = (food: string) => {
+        if (onFoodClick) {
+            onFoodClick(food);
         }
     };
 
@@ -39,7 +40,14 @@ function Greetings({
             {optional && <p>{optional}</p>}
             {age && <p>Age: {age}</p>}
             <p>Language: {language}</p>
-            <p>Favorite Foods: {favoriteFoods.join(', ')}</p>
+            <p>Favorite Foods:</p>
+            <ul>
+                {favoriteFoods.map((food, index) => (
+                    <li key={index} onClick={() => handleFoodClick(food)}>
+                        {food}
+                    </li>
+                ))}
+            </ul>
             {address && (
                 <>
                     <p>Address:</p>
@@ -50,7 +58,6 @@ function Greetings({
             )}
             <div>
                 <button onClick={handleClick}>Click!!!!</button>
-                <input type="text" ref={inputRef} />
             </div>
         </div>
     );
