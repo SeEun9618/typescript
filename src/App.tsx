@@ -2,6 +2,7 @@ import React from 'react';
 import Greetings from "./Greetings";
 import Counter from "./Counter";
 import MyForm from "./MyForm";
+import Board from "./Board";
 
 // Greetings.tsx
 // const App: React.FC = () => {
@@ -40,6 +41,7 @@ const App: React.FC = () => {
             address={{city: "seoul", state: "gw"}}
             onFoodClick={handleFoodClick}
         />
+        <Board />
       </>
   );
 }
