@@ -3,6 +3,7 @@ import Greetings from "./Greetings";
 import Counter from "./Counter";
 import MyForm from "./MyForm";
 import Board from "./Board";
+import Input from "./Input";
 
 // Greetings.tsx
 // const App: React.FC = () => {
@@ -29,6 +30,10 @@ const App: React.FC = () => {
       console.log(`Clicked on ${food}`);
   };
 
+  const inputUserId = (e: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(e.target.value);
+  };
+
   return (
       <>
         <MyForm onSubmit={onSubmit} />
@@ -42,6 +47,7 @@ const App: React.FC = () => {
             onFoodClick={handleFoodClick}
         />
         <Board />
+        <Input onChange={inputUserId} width={300} fontSize={20} />
       </>
   );
 }
