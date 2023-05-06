@@ -7,9 +7,9 @@ type InputProps = {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const customMediaQuery = (maxWidth: number):string => {
+const customMediaQuery = (maxWidth: number): string => {
     return `@media (max-width: ${maxWidth}px)`;
-}
+};
 
 const media = {
     custom: customMediaQuery,
@@ -19,21 +19,15 @@ const media = {
 };
 
 const InputBox = styled.input<InputProps>`
-  width: ${(props) => props.width + "px"};
-  font-size: ${(props) => props.fontSize + "px"};
+  width: ${(props) => `${props.width}px`};
+  font-size: ${(props) => `${props.fontSize}px`};
   padding: 15px;
   border-radius: 10px;
   border: 1px solid #e007ce;
 `;
 
-const Input = (props: InputProps) => {
-    return (
-        <InputBox
-            onChange={props.onChange}
-            fontSize={props.fontSize}
-            width={props.width}
-        />
-    );
+const Input = ({ onChange, width, fontSize }: InputProps) => {
+    return <InputBox onChange={onChange} width={width} fontSize={fontSize} />;
 };
 
 const Content = styled.div`
@@ -41,12 +35,18 @@ const Content = styled.div`
   width: 10em;
   background: papayawhip;
 
+  ${media.desktop}, ${media.tablet}, ${media.phone} {
+    background: papayawhip;
+  }
+
   ${media.desktop} {
     background: dodgerblue;
   }
+
   ${media.tablet} {
     background: mediumseagreen;
   }
+
   ${media.phone} {
     background: palevioletred;
   }
