@@ -4,7 +4,18 @@ import styled from "styled-components";
 type InputProps = {
     width: number;
     fontSize: number;
-    onChange?: (e: any) => void;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const customMediaQuery = (maxWidth: number):string => {
+    return `@media (max-width: ${maxWidth}px)`;
+}
+
+const media = {
+    custom: customMediaQuery,
+    desktop: customMediaQuery(922),
+    tablet: customMediaQuery(768),
+    phone: customMediaQuery(576),
 };
 
 const InputBox = styled.input<InputProps>`
@@ -25,4 +36,20 @@ const Input = (props: InputProps) => {
     );
 };
 
-export default Input;
+const Content = styled.div`
+  height: 10em;
+  width: 10em;
+  background: papayawhip;
+
+  ${media.desktop} {
+    background: dodgerblue;
+  }
+  ${media.tablet} {
+    background: mediumseagreen;
+  }
+  ${media.phone} {
+    background: palevioletred;
+  }
+`;
+
+export { Input, Content };

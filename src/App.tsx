@@ -3,7 +3,7 @@ import Greetings from "./Greetings";
 import Counter from "./Counter";
 import MyForm from "./MyForm";
 import Board from "./Board";
-import Input from "./Input";
+import { Content, Input } from "./Input";
 
 // Greetings.tsx
 // const App: React.FC = () => {
@@ -48,6 +48,7 @@ const App: React.FC = () => {
         />
         <Board />
         <Input onChange={inputUserId} width={300} fontSize={20} />
+        <Content />
       </>
   );
 }
